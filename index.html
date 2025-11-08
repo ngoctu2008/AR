@@ -38,7 +38,7 @@
       <a-marker preset="hiro">
         
         <a-gltf-model 
-          src="https://aframe.io/aframe/examples/showcase/dna/dna.gltf"
+          src="dna.gltf"
           scale="0.05 0.05 0.05" 
           position="0 0.5 0" 
           rotation="0 0 0"
@@ -86,34 +86,25 @@
     </a-scene>
 
     <script>
-      // Lấy các phần tử HTML của Hộp thông tin
+      // ...JavaScript giữ nguyên, không cần sửa...
       const infoBox = document.getElementById('infoBox');
       const infoTitle = document.getElementById('infoTitle');
       const infoContent = document.getElementById('infoContent');
 
-      // Chờ cho trang tải xong
       document.addEventListener('DOMContentLoaded', () => {
         const scene = document.querySelector('a-scene');
-
-        // Hàm để xử lý khi click vào bất cứ đâu trong cảnh
         scene.addEventListener('click', (evt) => {
-          // Kiểm tra xem có click trúng vật thể nào không
           const target = evt.detail.intersection && evt.detail.intersection.object.el;
           
-          // Nếu click trúng vật thể có class "clickable-hotspot"
           if (target && target.classList.contains('clickable-hotspot')) {
-            // Lấy dữ liệu từ các thuộc tính data-*
             const baseName = target.getAttribute('data-base-name');
             const baseFormula = target.getAttribute('data-base-formula');
             const baseInfo = target.getAttribute('data-base-info');
 
-            // Cập nhật nội dung Hộp thông tin
             infoTitle.textContent = `${baseName} (${baseFormula})`;
             infoContent.textContent = baseInfo;
-            // Hiển thị Hộp thông tin
             infoBox.style.display = 'block'; 
           } else {
-            // Nếu click ra ngoài, ẩn Hộp thông tin đi
             infoBox.style.display = 'none'; 
           }
         });
