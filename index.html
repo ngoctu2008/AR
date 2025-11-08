@@ -2,53 +2,61 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>AR Xây Gạch - Quy trình cơ bản</title>
+    <title>AR Chuỗi DNA</title>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <style>
-      #controls {
+      #infoBox {
         position: absolute;
         top: 10px;
-        left: 10px;
+        right: 10px;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        font-family: sans-serif;
+        display: none; /* Ban đầu ẩn đi */
         z-index: 999;
       }
-      button {
-        padding: 10px 15px;
-        font-size: 16px;
-        margin-right: 10px;
-        cursor: pointer;
+      #infoBox h3 {
+        margin-top: 0;
+        color: #00ffcc;
       }
     </style>
   </head>
 
   <body style="margin: 0px; overflow: hidden;">
-    <div id="controls">
-      <button id="startButton">Bắt đầu mô phỏng</button>
-      <button id="resetButton" style="display: none;">Đặt lại</button>
+    <div id="infoBox">
+      <h3 id="infoTitle"></h3>
+      <p id="infoContent"></p>
     </div>
 
     <a-scene embedded arjs>
       <a-marker preset="hiro">
+        <a-gltf-model 
+          src="https://aframe.io/aframe/examples/showcase/dna/dna.gltf"
+          scale="0.05 0.05 0.05" 
+          position="0 0.5 0" 
+          rotation="0 0 0"
+          animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear"></a-gltf-model>
+          
+        <a-sphere 
+          id="hotspot-adenine"
+          position="0.08 0.5 0" radius="0.02" 
+          material="color: #FF0000; opacity: 0.7" 
+          class="clickable-hotspot"
+          data-base-name="Adenine"
+          data-base-formula="C5H5N5"
+          data-base-info="Adenine (A) là một trong bốn loại nucleobase trong DNA. Nó luôn kết cặp với Thymine (T) bằng hai liên kết hydro."></a-sphere>
         
-        <a-box id="vua" 
-          position="0 0.01 0" 
-          width="0.25" height="0.02" depth="0.12" 
-          material="color: #8B4513; opacity: 0;" 
-          visible="false"></a-box>
-        
-        <a-box id="gach" 
-          position="0 0.06 0" 
-          width="0.25" height="0.08" depth="0.12" 
-          material="color: #CD5C5C; opacity: 0;" 
-          visible="false"></a-box>
-
-        <a-entity id="canChinh" 
-          position="0 0.11 0" 
-          rotation="0 90 0" 
-          visible="false">
-          <a-plane width="0.3" height="0.005" color="#00FF00" opacity="0.7"></a-plane>
-          <a-text value="Căn chỉnh!" position="0 0.05 0" align="center" color="#FFFFFF" scale="0.1 0.1 0.1"></a-text>
-        </a-entity>
+        <a-sphere 
+          id="hotspot-guanine"
+          position="-0.08 0.6 0" radius="0.02" 
+          material="color: #0000FF; opacity: 0.7" 
+          class="clickable-hotspot"
+          data-base-name="Guanine"
+          data-base-formula="C5H5N5O"
+          data-base-info="Guanine (G) là một loại nucleobase khác trong DNA. Nó luôn kết cặp với Cytosine (C) bằng ba liên kết hydro."></a-sphere>
 
       </a-marker>
 
@@ -56,49 +64,29 @@
     </a-scene>
 
     <script>
-      const startButton = document.getElementById('startButton');
-      const resetButton = document.getElementById('resetButton');
-      const vua = document.getElementById('vua');
-      const gach = document.getElementById('gach');
-      const canChinh = document.getElementById('canChinh');
+      const infoBox = document.getElementById('infoBox');
+      const infoTitle = document.getElementById('infoTitle');
+      const infoContent = document.getElementById('infoContent');
 
-      function resetSimulation() {
-        vua.setAttribute('visible', 'false');
-        vua.setAttribute('material', 'opacity: 0');
-        gach.setAttribute('visible', 'false');
-        gach.setAttribute('material', 'opacity: 0');
-        canChinh.setAttribute('visible', 'false');
-        startButton.style.display = 'block';
-        resetButton.style.display = 'none';
-      }
+      document.addEventListener('DOMContentLoaded', () => {
+        const scene = document.querySelector('a-scene');
 
-      function startSimulation() {
-        startButton.style.display = 'none';
-        resetButton.style.display = 'block';
+        // Hàm để xử lý khi click vào hotspot
+        scene.addEventListener('click', (evt) => {
+          const target = evt.detail.intersection && evt.detail.intersection.object.el;
+          if (target && target.classList.contains('clickable-hotspot')) {
+            const baseName = target.getAttribute('data-base-name');
+            const baseFormula = target.getAttribute('data-base-formula');
+            const baseInfo = target.getAttribute('data-base-info');
 
-        // Bước 1: Hiện lớp vữa
-        vua.setAttribute('visible', 'true');
-        vua.setAttribute('material', 'opacity: 1');
-        console.log("Bước 1: Lớp vữa");
-
-        setTimeout(() => {
-          // Bước 2: Hiện gạch
-          gach.setAttribute('visible', 'true');
-          gach.setAttribute('material', 'opacity: 1');
-          console.log("Bước 2: Đặt gạch");
-
-          setTimeout(() => {
-            // Bước 3: Hiện thanh căn chỉnh
-            canChinh.setAttribute('visible', 'true');
-            console.log("Bước 3: Căn chỉnh");
-          }, 2000); 
-        }, 2000); 
-      }
-
-      startButton.addEventListener('click', startSimulation);
-      resetButton.addEventListener('click', resetSimulation);
-
-      resetSimulation();
+            infoTitle.textContent = `${baseName} (${baseFormula})`;
+            infoContent.textContent = baseInfo;
+            infoBox.style.display = 'block'; // Hiển thị hộp thông tin
+          } else {
+            infoBox.style.display = 'none'; // Ẩn hộp thông tin nếu click ra ngoài
+          }
+        });
+      });
     </script>
   </body>
 </html>
