@@ -2,9 +2,10 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>AR Chuỗi DNA</title>
+    <title>AR Chuỗi DNA (Hoàn chỉnh 4 Base)</title>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    
     <style>
       #infoBox {
         position: absolute;
@@ -26,13 +27,16 @@
   </head>
 
   <body style="margin: 0px; overflow: hidden;">
+    
     <div id="infoBox">
       <h3 id="infoTitle"></h3>
       <p id="infoContent"></p>
     </div>
 
     <a-scene embedded arjs>
+      
       <a-marker preset="hiro">
+        
         <a-gltf-model 
           src="https://aframe.io/aframe/examples/showcase/dna/dna.gltf"
           scale="0.05 0.05 0.05" 
@@ -58,32 +62,59 @@
           data-base-formula="C5H5N5O"
           data-base-info="Guanine (G) là một loại nucleobase khác trong DNA. Nó luôn kết cặp với Cytosine (C) bằng ba liên kết hydro."></a-sphere>
 
+        <a-sphere 
+          id="hotspot-thymine"
+          position="0.08 0.7 0" radius="0.02" 
+          material="color: #FFFF00; opacity: 0.7" 
+          class="clickable-hotspot"
+          data-base-name="Thymine"
+          data-base-formula="C5H6N2O2"
+          data-base-info="Thymine (T) là một base pyrimidine. Trong DNA, nó luôn kết cặp với Adenine (A) bằng hai liên kết hydro."></a-sphere>
+
+        <a-sphere 
+          id="hotspot-cytosine"
+          position="-0.08 0.8 0" radius="0.02" 
+          material="color: #00FF00; opacity: 0.7" 
+          class="clickable-hotspot"
+          data-base-name="Cytosine"
+          data-base-formula="C4H5N3O"
+          data-base-info="Cytosine (C) là một base pyrimidine. Trong DNA, nó luôn kết cặp với Guanine (G) bằng ba liên kết hydro."></a-sphere>
+
       </a-marker>
 
       <a-camera-static />
     </a-scene>
 
     <script>
+      // Lấy các phần tử HTML của Hộp thông tin
       const infoBox = document.getElementById('infoBox');
       const infoTitle = document.getElementById('infoTitle');
       const infoContent = document.getElementById('infoContent');
 
+      // Chờ cho trang tải xong
       document.addEventListener('DOMContentLoaded', () => {
         const scene = document.querySelector('a-scene');
 
-        // Hàm để xử lý khi click vào hotspot
+        // Hàm để xử lý khi click vào bất cứ đâu trong cảnh
         scene.addEventListener('click', (evt) => {
+          // Kiểm tra xem có click trúng vật thể nào không
           const target = evt.detail.intersection && evt.detail.intersection.object.el;
+          
+          // Nếu click trúng vật thể có class "clickable-hotspot"
           if (target && target.classList.contains('clickable-hotspot')) {
+            // Lấy dữ liệu từ các thuộc tính data-*
             const baseName = target.getAttribute('data-base-name');
             const baseFormula = target.getAttribute('data-base-formula');
             const baseInfo = target.getAttribute('data-base-info');
 
+            // Cập nhật nội dung Hộp thông tin
             infoTitle.textContent = `${baseName} (${baseFormula})`;
             infoContent.textContent = baseInfo;
-            infoBox.style.display = 'block'; // Hiển thị hộp thông tin
+            // Hiển thị Hộp thông tin
+            infoBox.style.display = 'block'; 
           } else {
-            infoBox.style.display = 'none'; // Ẩn hộp thông tin nếu click ra ngoài
+            // Nếu click ra ngoài, ẩn Hộp thông tin đi
+            infoBox.style.display = 'none'; 
           }
         });
       });
