@@ -6,7 +6,6 @@
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <style>
-      /* Thêm một chút CSS để có nút Start/Reset */
       #controls {
         position: absolute;
         top: 10px;
@@ -30,12 +29,27 @@
 
     <a-scene embedded arjs>
       <a-marker preset="hiro">
-        <a-box id="vua" position="0 0.05 0" width="0.25" height="0.02" depth="0.12" material="color: #8B4513; opacity: 0;" visible="false"></a-box>
-        <a-box id="gach" position="0 0.17 0" width="0.25" height="0.08" depth="0.12" material="color: #CD5C5C; opacity: 0;" visible="false"></a-box>
-        <a-entity id="canChinh" position="0 0.25 0" rotation="0 90 0" visible="false">
+        
+        <a-box id="vua" 
+          position="0 0.01 0" 
+          width="0.25" height="0.02" depth="0.12" 
+          material="color: #8B4513; opacity: 0;" 
+          visible="false"></a-box>
+        
+        <a-box id="gach" 
+          position="0 0.06 0" 
+          width="0.25" height="0.08" depth="0.12" 
+          material="color: #CD5C5C; opacity: 0;" 
+          visible="false"></a-box>
+
+        <a-entity id="canChinh" 
+          position="0 0.11 0" 
+          rotation="0 90 0" 
+          visible="false">
           <a-plane width="0.3" height="0.005" color="#00FF00" opacity="0.7"></a-plane>
           <a-text value="Căn chỉnh!" position="0 0.05 0" align="center" color="#FFFFFF" scale="0.1 0.1 0.1"></a-text>
         </a-entity>
+
       </a-marker>
 
       <a-camera-static />
@@ -64,27 +78,26 @@
 
         // Bước 1: Hiện lớp vữa
         vua.setAttribute('visible', 'true');
-        vua.setAttribute('material', 'opacity: 1'); // Hiện rõ vữa
+        vua.setAttribute('material', 'opacity: 1');
         console.log("Bước 1: Lớp vữa");
 
         setTimeout(() => {
           // Bước 2: Hiện gạch
           gach.setAttribute('visible', 'true');
-          gach.setAttribute('material', 'opacity: 1'); // Hiện rõ gạch
+          gach.setAttribute('material', 'opacity: 1');
           console.log("Bước 2: Đặt gạch");
 
           setTimeout(() => {
             // Bước 3: Hiện thanh căn chỉnh
             canChinh.setAttribute('visible', 'true');
             console.log("Bước 3: Căn chỉnh");
-          }, 2000); // 2 giây sau khi gạch xuất hiện
-        }, 2000); // 2 giây sau khi vữa xuất hiện
+          }, 2000); 
+        }, 2000); 
       }
 
       startButton.addEventListener('click', startSimulation);
       resetButton.addEventListener('click', resetSimulation);
 
-      // Khởi tạo trạng thái ban đầu khi trang tải
       resetSimulation();
     </script>
   </body>
